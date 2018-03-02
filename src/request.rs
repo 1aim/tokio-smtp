@@ -141,6 +141,7 @@ pub enum Request {
     StartTls,
     Mail { from: Mailbox, params: Vec<MailParam> },
     Rcpt { to: Mailbox, params: Vec<RcptParam> },
+    Reset,
     Data,
     Quit,
 }
@@ -166,6 +167,9 @@ impl Display for Request {
             },
             Request::Data => {
                 f.write_str("DATA\r\n")
+            },
+            Request::Reset => {
+                f.write_str("RSET\r\n")
             },
             Request::Quit => {
                 f.write_str("QUIT\r\n")
@@ -273,6 +277,10 @@ mod tests {
             (
                 Request::Data,
                 "DATA\r\n",
+            ),
+            (
+                Request::Reset,
+                "RSET\r\n",
             ),
             (
                 Request::Quit,
