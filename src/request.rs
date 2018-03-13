@@ -144,6 +144,7 @@ pub enum Request {
     Reset,
     Data,
     Quit,
+    Raw(String)
 }
 
 impl Display for Request {
@@ -174,6 +175,9 @@ impl Display for Request {
             Request::Quit => {
                 f.write_str("QUIT\r\n")
             },
+            Request::Raw(ref string) => {
+                write!(f, "{}\r\n", string)
+            }
         }
     }
 }
@@ -286,6 +290,10 @@ mod tests {
                 Request::Quit,
                 "QUIT\r\n",
             ),
+            (
+                Request::Raw("XUNKNOWN 123".to_owned()),
+                "XUNKNOWN 123\r\n"
+            )
         ] {
             assert_eq!(input.to_string(), expect);
         }
